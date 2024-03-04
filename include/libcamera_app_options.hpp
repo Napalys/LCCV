@@ -65,7 +65,7 @@ public:
 	camera=0;
 	}
 
-	virtual ~Options() {}
+	virtual ~Options() noexcept = default;
 
 	virtual void Print() const;
 
@@ -100,11 +100,13 @@ public:
 	std::string denoise;
 	std::string info_text;
 	unsigned int camera;
+    /// AfModeManual, AfModeContinuous, AfModeAuto
+    libcamera::controls::AfModeEnum auto_focus_mode = libcamera::controls::AfModeManual;
+    /// Works only with AfModeManual values range from 0 to infinity
+    float lens_position = 0.f;
 
 protected:
 	int metering_index;
 	int exposure_index;
     int awb_index;
-
-private:
 };

@@ -36,4 +36,6 @@ void Options::Print() const
 	std::cerr << "    sharpness: " << sharpness << std::endl;
 	std::cerr << "    framerate: " << framerate << std::endl;
 	std::cerr << "    denoise: " << denoise << std::endl;
+    std::cerr << "    auto-focus: " << auto_focus_mode << std::endl;
+    std::cerr << "    lens-position: " << lens_position << std::endl;
 }
