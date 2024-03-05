@@ -301,7 +301,6 @@ void LibcameraApp::ApplyRoiSettings(){
 }
 
 void LibcameraApp::ApplyFocusOptions(){
-    std::cout << "libcamera_app.cpp ApplyFocusOptions" << std::endl;
     if (!controls_.get(controls::AfMode) && camera_->controls().count(&controls::AfMode) > 0)
         controls_.set(controls::AfMode, options_->auto_focus_mode);
     if (!controls_.get(controls::AfRange) && camera_->controls().count(&controls::AfRange) > 0)
