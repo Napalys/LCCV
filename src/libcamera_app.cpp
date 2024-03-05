@@ -228,30 +228,8 @@ void LibcameraApp::StartCamera()
 		controls_.set(controls::Saturation, options_->saturation);
 	if (!controls_.get(controls::Sharpness))
 		controls_.set(controls::Sharpness, options_->sharpness);
-    if (!controls_.get(controls::AfMode) && camera_->controls().count(&controls::AfMode) > 0)
-        controls_.set(controls::AfMode, options_->auto_focus_mode);
-    if (!controls_.get(controls::AfRange) && camera_->controls().count(&controls::AfRange) > 0)
-        controls_.set(controls::AfRange, options_->auto_focus_range);
-    if (!controls_.get(controls::AfSpeed) && camera_->controls().count(&controls::AfSpeed) > 0){
-        controls_.set(controls::AfSpeed, options_->auto_focus_speed);
-    }
-    if (!controls_.get(controls::AfWindows) && !controls_.get(controls::AfMetering) &&
-            options_->auto_focus_width != 0 && options_->auto_focus_height != 0) {
-        Rectangle sensor_area = *camera_->properties().get(properties::ScalerCropMaximum);
-        const int x = options_->auto_focus_x * sensor_area.width;
-        const int y = options_->auto_focus_y * sensor_area.height;
-        const int w = options_->auto_focus_width * sensor_area.width;
-        const int h = options_->auto_focus_height * sensor_area.height;
-        Rectangle windows_rectangle[1];
-        windows_rectangle[0] = Rectangle(x, y, w, h);
-        windows_rectangle[0].translateBy(sensor_area.topLeft());
-        controls_.set(controls::AfMetering, controls::AfMeteringWindows);
-        controls_.set(controls::AfWindows, windows_rectangle);
-    }
-    if (options_->auto_focus_mode == libcamera::controls::AfModeManual && options_->lens_position &&
-        camera_->controls().count(&controls::LensPosition) > 0 && !controls_.get(controls::LensPosition)) {
-        controls_.set(controls::LensPosition, options_->lens_position);
-    }
+
+    ApplyFocusOptions();
 
 
         if (camera_->start(&controls_))
@@ -319,6 +297,34 @@ void LibcameraApp::ApplyRoiSettings(){
         if (options_->verbose)
             std::cerr << "Using crop " << crop.toString() << std::endl;
         controls_.set(controls::ScalerCrop, crop);
+    }
+}
+
+void LibcameraApp::ApplyFocusOptions(){
+    std::cout << "libcamera_app.cpp ApplyFocusOptions" << std::endl;
+    if (!controls_.get(controls::AfMode) && camera_->controls().count(&controls::AfMode) > 0)
+        controls_.set(controls::AfMode, options_->auto_focus_mode);
+    if (!controls_.get(controls::AfRange) && camera_->controls().count(&controls::AfRange) > 0)
+        controls_.set(controls::AfRange, options_->auto_focus_range);
+    if (!controls_.get(controls::AfSpeed) && camera_->controls().count(&controls::AfSpeed) > 0){
+        controls_.set(controls::AfSpeed, options_->auto_focus_speed);
+    }
+    if (!controls_.get(controls::AfWindows) && !controls_.get(controls::AfMetering) &&
+        options_->auto_focus_width != 0 && options_->auto_focus_height != 0) {
+        Rectangle sensor_area = *camera_->properties().get(properties::ScalerCropMaximum);
+        const int x = options_->auto_focus_x * sensor_area.width;
+        const int y = options_->auto_focus_y * sensor_area.height;
+        const int w = options_->auto_focus_width * sensor_area.width;
+        const int h = options_->auto_focus_height * sensor_area.height;
+        Rectangle windows_rectangle[1];
+        windows_rectangle[0] = Rectangle(x, y, w, h);
+        windows_rectangle[0].translateBy(sensor_area.topLeft());
+        controls_.set(controls::AfMetering, controls::AfMeteringWindows);
+        controls_.set(controls::AfWindows, windows_rectangle);
+    }
+    if (options_->auto_focus_mode == libcamera::controls::AfModeManual && options_->lens_position &&
+        camera_->controls().count(&controls::LensPosition) > 0 && !controls_.get(controls::LensPosition)) {
+        controls_.set(controls::LensPosition, options_->lens_position);
     }
 }
 
