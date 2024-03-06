@@ -65,7 +65,7 @@ public:
 	camera=0;
 	}
 
-	virtual ~Options() {}
+	virtual ~Options() noexcept = default;
 
 	virtual void Print() const;
 
@@ -100,11 +100,19 @@ public:
 	std::string denoise;
 	std::string info_text;
 	unsigned int camera;
+    /// Auto focus on a region e.g. 0.25,0.25,0.5,0.5 works only with mode = AfModeContinuous
+    float auto_focus_x = 0, auto_focus_y = 0, auto_focus_width = 0, auto_focus_height = 0;
+    /// AfSpeedNormal = 0, AfSpeedFast = 1
+    libcamera::controls::AfSpeedEnum auto_focus_speed = libcamera::controls::AfSpeedNormal;
+    /// AfRangeNormal = 0, AfRangeMacro = 1, AfRangeFull = 2
+    libcamera::controls::AfRangeEnum auto_focus_range = libcamera::controls::AfRangeNormal;
+    /// AfModeManual = 0, AfModeAuto = 1, AfModeContinuous = 2
+    libcamera::controls::AfModeEnum auto_focus_mode = libcamera::controls::AfModeManual;
+    /// Works only with AfModeManual values range from 0 to infinity
+    float lens_position = 0.f;
 
 protected:
 	int metering_index;
 	int exposure_index;
     int awb_index;
-
-private:
 };

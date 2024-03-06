@@ -30,6 +30,7 @@ public:
 
     //Applies new zoom options. Before invoking this func modify options->roi.
     void ApplyZoomOptions();
+    void ApplyFocusOptions();
 
 protected:
     void run();

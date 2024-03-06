@@ -202,3 +202,8 @@ void PiCamera::ApplyZoomOptions()
 {
     app->ApplyRoiSettings();
 }
+
+void PiCamera::ApplyFocusOptions()
+{
+    app->ApplyFocusOptions();
+}

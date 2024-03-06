@@ -103,6 +103,7 @@ public:
 	void StopCamera();
 
     void ApplyRoiSettings();
+    void ApplyFocusOptions();
 
 	Msg Wait();
 	void PostMessage(MsgType &t, MsgPayload &p);
